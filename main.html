@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Lullaby Lovescape Digital Diary ✨</title>
+
+<style>
+:root {
+    --primary: #ff69b4;
+    --secondary: #ffd6e9;
+    --accent: #ffbaf1;
+    --text: #665566;
+    --window-bg: rgba(255, 255, 255, 0.95);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--secondary);
+    font-family: 'Comic Sans MS', cursive;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background-image:
+        radial-gradient(#fff 20%, transparent 20%),
+        radial-gradient(#fff 20%, transparent 20%);
+    background-position: 0 0, 50px 50px;
+    background-size: 100px 100px;
+}
+
+/* DESKTOP ICONS */
+.desktop-icons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 10;
+}
+
+.desktop-icon {
+    width: 80px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+.desktop-icon:hover { transform: scale(1.1); }
+
+.desktop-icon img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    border: 2px solid var(--primary);
+    background: white;
+    padding: 5px;
+}
+
+.desktop-icon span {
+    width: 100%;
+    display: block;
+    font-size: 12px;
+    color: var(--text);
+    text-align: center; /* 👈 fixed alignment */
+}
+
+/* WINDOWS */
+.window {
+    background: var(--window-bg);
+    border: 3px solid var(--primary);
+    border-radius: 15px;
+    width: 350px;
+    position: absolute;
+    padding: 10px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,.1);
+    display: none;
+    backdrop-filter: blur(5px);
+    touch-action: none;
+}
+
+.window.active { display: block; }
+
+.window-title {
+    background: var(--primary);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: grab;
+}
+
+.buttons { display: flex; gap: 8px; }
+
+.button {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+.content {
+    padding: 15px;
+    color: var(--text);
+    max-height: 400px;
+    overflow-y: auto;
+    touch-action: pan-y;
+}
+
+.profile-card {
+    display: flex;
+    gap: 15px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+}
+
+.social-links {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.social-link {
+    background: white;
+    padding: 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    gap: 8px;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}
+
+.gallery img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* MENU */
+.menu {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    border: 3px solid var(--primary);
+    display: flex;
+    gap: 25px;
+    z-index: 1000;
+}
+
+/* MUSIC PLAYER */
+.music-player {
+    position: fixed;
+    bottom: 110px;      /* a bit higher */
+    right: 20px;
+    width: 270px;        /* perfect square */
+    height: 270px;       /* perfect square */
+    background: white;
+    border: 2px solid var(--primary);
+    border-radius: 15px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* SONG NAME */
+.song-name {
+    margin-top: 8px;
+    font-size: 12px;
+    text-align: center;
+    color: var(--text);
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* MUSIC BUTTONS */
+.music-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.music-control {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+/* 📱 MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+
+.desktop-icons {
+    position: relative;
+    flex-direction: row;
+    justify-content: center;
+    padding: 15px;
+}
+
+.window {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 24px);
+    max-width: 420px;
+    max-height: calc(100vh - 140px);
+}
+
+.content {
+    max-height: calc(100vh - 220px);
+}
+
+.menu {
+    bottom: 10px;
+    padding: 10px 15px;
+    gap: 15px;
+}
+
+.music-player {
+    right: 50%;
+    transform: translateX(50%);
+    width: calc(100% - 30px);
+    max-width: 360px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ICONS -->
+<div class="desktop-icons">
+    <div class="desktop-icon" onclick="toggleWindow('profile')">
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2hrbHI0djZsdmlxcWVmNHc0cnoyejQ0M292b3k0dTJjcG5oajRkZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/AiTautetbU6S65X5LE/giphy.gif">
+        <span>Our Love</span>
+    </div>
+    <div class="desktop-icon" onclick="toggleWindow('gallery')">
+        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDU5dDJzOW52ZHJybTB0cWZqbzRlbmJoeXF0MjgyMWJkdTA3aWlxZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/92YG8KKSjYhMc/giphy.gif">
+        <span>Our Memories</span>
+    </div>
+    <div class="desktop-icon" onclick="toggleWindow('blog')">
+        <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZXVzc2FwYmo1bmRpcTdoMnYzcTFpcG9lM2dzMXBocHJ6ZmwwMGpiNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5Oyaa78rzRaixvweQe/giphy.gif">
+        <span>Love Letter</span>
+    </div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="window" style="top:50px; left:150px;">
+<div class="window-title">Our Love
+<div class="buttons">
+<div class="button" style="background:#ffff4d" onclick="minimizeWindow('profile')"></div>
+<div class="button" style="background:#ff6b6b" onclick="closeWindow('profile')"></div>
+</div>
+</div>
+<div class="content">
+<div class="profile-card">
+<img src="./img/6.JPG" class="profile-image">
+<div>
+<h3 style="color:var(--primary)">For you My Love</h3>
+<p>Happy Anniversary</p>
+<p>January 23</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="window" style="top:100px; left:550px;">
+<div class="window-title">Our Memories
+<div class="buttons">
+<div class="button" style="background:#ffff4d" onclick="minimizeWindow('gallery')"></div>
+<div class="button" style="background:#ff6b6b" onclick="closeWindow('gallery')"></div>
+</div>
+</div>
+<div class="content">
+<div class="gallery">
+<img src="./img/5.JPG">
+<img src="./img/8.JPG">
+<img src="./img/3.JPG">
+<img src="./img/7.JPG">
+</div>
+</div>
+</div>
+
+<!-- BLOG -->
+<div id="blog" class="window" style="top:150px; left:350px;">
+<div class="window-title">Love Letter
+<div class="buttons">
+<div class="button" style="background:#ffff4d" onclick="minimizeWindow('blog')"></div>
+<div class="button" style="background:#ff6b6b" onclick="closeWindow('blog')"></div>
+</div>
+</div>
+<div class="content">
+<p>Quizás debería empezar por nuestra primera salida juntos, aquel día donde ambos estábamos nerviosos, pero felices. Aunque a partir de ese momento, cada día que te veía me invadía una felicidad y deseo porque los minutos se detuvieran. Desde ese momento, al regresar a casa, no podía dejar de sonreír. </p>
+<p>Me has hecho sentir la mujer más segura, amada y respetada, pero sobretodo la mujer más afortunada por tenerte a ti a mi lado, el hombre que roba mis suspiros, al que admiro y amo con devoción.</p>
+<p>Te has vuelto mi mundo entero, mi todo, mi familia, la persona con la que quiero seguir pasando el resto de mis días</p>
+</div>
+</div>
+
+<!-- MENU -->
+<div class="menu">
+    <a href="claw.html">Love Claw Machine</a>
+  </div>
+  
+
+<!-- MUSIC -->
+<div class="music-player">
+    <img src="./img/1.JPG" style="width:100%; border-radius:10px; height: 170px; object-fit: cover;">
+    <div class="song-name" id="songName">Song 1</div>
+  
+    <div class="music-controls">
+      <div class="music-control" id="prevBtn">⏮</div>
+      <div class="music-control" id="playBtn">▶</div>
+      <div class="music-control" id="nextBtn">⏭</div>
+    </div>
+  </div>
+  
+  <audio id="audioPlayer"></audio>
+  
+
+<script>
+    const windows = document.querySelectorAll('.window');
+    let zIndex = 10;
+    
+    windows.forEach(win => {
+      const title = win.querySelector('.window-title');
+    
+      let startX, startY, initialX, initialY, dragging = false;
+    
+      function startDrag(e) {
+        dragging = true;
+        win.style.zIndex = ++zIndex;
+    
+        const point = e.touches ? e.touches[0] : e;
+        startX = point.clientX;
+        startY = point.clientY;
+    
+        initialX = win.offsetLeft;
+        initialY = win.offsetTop;
+    
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stopDrag);
+        document.addEventListener('touchmove', drag, { passive: false });
+        document.addEventListener('touchend', stopDrag);
+      }
+    
+      function drag(e) {
+        if (!dragging) return;
+    
+        const point = e.touches ? e.touches[0] : e;
+        win.style.left = initialX + (point.clientX - startX) + 'px';
+        win.style.top = initialY + (point.clientY - startY) + 'px';
+    
+        if (e.touches) e.preventDefault(); // prevents scroll while dragging
+      }
+    
+      function stopDrag() {
+        dragging = false;
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stopDrag);
+        document.removeEventListener('touchmove', drag);
+        document.removeEventListener('touchend', stopDrag);
+      }
+    
+      title.addEventListener('mousedown', startDrag);
+      title.addEventListener('touchstart', startDrag, { passive: false });
+    });
+    
+function toggleWindow(id) {
+    const win = document.getElementById(id);
+    win.classList.toggle('active');
+    win.style.zIndex = ++zIndex;
+}
+
+function closeWindow(id) {
+    document.getElementById(id).classList.remove('active');
+}
+
+function minimizeWindow(id) {
+    const win = document.getElementById(id);
+    win.style.transform = 'scale(0.1)';
+    setTimeout(() => {
+        win.classList.remove('active');
+        win.style.transform = '';
+    }, 300);
+}
+
+/* ---------------- MUSIC PLAYER ---------------- */
+const audioPlayer = document.getElementById('audioPlayer');
+const songName = document.getElementById('songName');
+
+const songs = [
+  { name: "Compartir - Carla Morrison", file: "./Carla Morrison - Compartir (letra).mp3" },
+  { name: "Something Stupid - Frank and Nancy Sinatra", file: "./Frank Sinatra - Something Stupid (Lyrics) [With Nancy Sinatra].mp3" },
+  { name: "Just the Two of Us - Grover Washington Jr.", file: "./Grover Washington Jr. - Just the Two of Us (feat. Bill Withers) (Official Lyric Video).mp3" },
+  { name: "Tengo Todo Contigo", file: "./Tengo Todo Contigo.mp3" },
+  { name: "Algo Me gusta De Ti", file: "./Wisin Y Yandel ft Chris Brown, T-Pain - Algo Me Gusta De Ti (Los Lideres) 2012.mp3" }
+];
+
+let currentSong = 0;
+let isPlaying = false;
+
+function loadSong(index) {
+  audioPlayer.src = songs[index].file;
+  songName.textContent = songs[index].name;
+}
+
+function playPause() {
+  if (isPlaying) {
+    audioPlayer.pause();
+    isPlaying = false;
+    document.getElementById('playBtn').textContent = "▶";
+  } else {
+    audioPlayer.play();
+    isPlaying = true;
+    document.getElementById('playBtn').textContent = "⏸";
+  }
+}
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  currentSong = (currentSong - 1 + songs.length) % songs.length;
+  loadSong(currentSong);
+  if(isPlaying) audioPlayer.play();
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  currentSong = (currentSong + 1) % songs.length;
+  loadSong(currentSong);
+  if(isPlaying) audioPlayer.play();
+});
+
+document.getElementById('playBtn').addEventListener('click', playPause);
+
+audioPlayer.addEventListener('ended', () => {
+  currentSong = (currentSong + 1) % songs.length;
+  loadSong(currentSong);
+  audioPlayer.play();
+});
+
+// Load first song
+loadSong(currentSong);
+</script>
+
+</body>
+</html>
